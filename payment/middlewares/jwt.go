@@ -10,13 +10,28 @@ import (
 	"github.com/EDDYCJY/go-gin-example/pkg/util"
 )
 
+func generateToken() string {
+	username := "lynn"
+	password := "ahua"
+
+	token, err := util.GenerateToken(username, password)
+	if err != nil {
+
+	}
+	// token
+	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAzMmI1YjJjNjA4YmQ0NTU2OGJiZGE0ZDc3NmM3OTE1IiwicGFzc3dvcmQiOiIxYjA3YTFkNzczNTI0M2QzMmJkY2NlYThhYjI3ZGYxNCIsImV4cCI6MTY5OTM4MDQyOSwiaXNzIjoiZ2luLWJsb2cifQ.SoNTLJcFs5uHloQQY23DPbKqcEvZwsdnxTdfPPPrrFU
+	return token
+}
+
 // JWT is jwt middleware
 func JWT(c *gin.Context) {
 	var code int
 	var data interface{}
 
 	code = e.SUCCESS
+	// fmt.Println(generateToken())
 	token := c.Query("token")
+	// fmt.Println(token)
 	if token == "" {
 		code = e.INVALID_PARAMS
 	} else {
