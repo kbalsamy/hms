@@ -33,7 +33,7 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 	// transferor going to transfer mondy to someone
 	ul := models.Credit{Id: transferorId}
 	tx.Find(&ul)
-	ul.Amount = ul.Amount - amount
+	ul.Amount = ul.Amount + amount
 	if err := tx.Save(&ul).Error; err != nil {
 		tx.Rollback()
 		con.error(c, "Payment account abnormal")
