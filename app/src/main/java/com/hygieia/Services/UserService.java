@@ -15,6 +15,16 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    public User GetUserById(Integer id) throws Exception {
+        var user = userRepository.findById(id);
+        var newUser = new User();
+        if (user.isEmpty()) {
+            throw new Exception("User does not exist");            
+        }
+        BeanUtils.copyProperties(user.get(),newUser);
+        return newUser;
+
+    }
 
     public List<User> GetAllUsers() {
         var listOfUsers = new ArrayList<User>();

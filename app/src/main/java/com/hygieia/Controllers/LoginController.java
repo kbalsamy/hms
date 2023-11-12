@@ -27,6 +27,13 @@ public class LoginController {
 
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> getUser(@PathVariable Integer id) throws Exception{
+        var user = userService.GetUserById(id);
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(user);
+
+    }
+
     @PostMapping()
     public ResponseEntity<?> createUser(@RequestBody @Validated User user) {
         userService.createUser(user);
