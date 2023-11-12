@@ -3,15 +3,7 @@ package com.hygieia.Entities;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name="roles")
 public class Role {
@@ -25,4 +17,28 @@ public class Role {
 
     @ManyToMany(mappedBy="roles")
     private List<User> Users;
+
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public List<User> getUsers() {
+        return Users;
+    }
+
+    public void setUsers(List<User> users) {
+        Users = users;
+    }
 }
