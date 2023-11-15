@@ -29,7 +29,6 @@ func init() {
 	// refer https://github.com/go-sql-driver/mysql#dsn-data-source-name for details
 	// dsn := "root:Ahua135!@tcp(127.0.0.1:3306)/golang?charset=utf8mb4&parseTime=True&loc=Local"
 	dsn := fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", user, password, ip, port, database)
-	fmt.Println("1111111111" + dsn)
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// SkipDefaultTransaction: true   //禁用事务
 	})

@@ -19,7 +19,7 @@ func generateToken() string {
 
 	}
 	// token
-	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAzMmI1YjJjNjA4YmQ0NTU2OGJiZGE0ZDc3NmM3OTE1IiwicGFzc3dvcmQiOiIxYjA3YTFkNzczNTI0M2QzMmJkY2NlYThhYjI3ZGYxNCIsImV4cCI6MTY5OTM4MDQyOSwiaXNzIjoiZ2luLWJsb2cifQ.SoNTLJcFs5uHloQQY23DPbKqcEvZwsdnxTdfPPPrrFU
+	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAzMmI1YjJjNjA4YmQ0NTU2OGJiZGE0ZDc3NmM3OTE1IiwicGFzc3dvcmQiOiIxYjA3YTFkNzczNTI0M2QzMmJkY2NlYThhYjI3ZGYxNCIsImV4cCI6MTcwMDA1Mzc0OCwiaXNzIjoiZ2luLWJsb2cifQ.T2qQz0X1tNEWpMQp7pdiXEnQF6g-Nua1vQqzHAU82HU
 	return token
 }
 
@@ -29,6 +29,7 @@ func JWT(c *gin.Context) {
 	var data interface{}
 
 	code = e.SUCCESS
+	// generate token
 	// fmt.Println(generateToken())
 	token := c.Query("token")
 	// fmt.Println(token)
