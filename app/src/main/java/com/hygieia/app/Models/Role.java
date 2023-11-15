@@ -1,4 +1,4 @@
-package com.hygieia.Entities;
+package com.hygieia.app.Models;
 
 import java.util.List;
 

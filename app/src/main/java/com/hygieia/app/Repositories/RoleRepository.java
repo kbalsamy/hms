@@ -1,13 +1,12 @@
-package com.hygieia.Repositories;
+package com.hygieia.app.Repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.hygieia.Entities.Role;
-import com.hygieia.Entities.User;
+import com.hygieia.app.Models.User;
 
 public interface RoleRepository extends JpaRepository<User,Integer> 
 {
 
-    Role findByname(String name);
+   // Role findByname(String name);
     
 }
