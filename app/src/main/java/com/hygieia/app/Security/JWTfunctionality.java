@@ -1,24 +1,33 @@
 package com.hygieia.app.Security;
 
 import java.io.Serializable;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JWTfunctionality implements Serializable {
     @Value("${hygieia.jwt.key}")
-	private String Secret_key ;
+	private String Secret_key;
 
+	private SecretKey getKey() {
+		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(Secret_key));
+	}
 
 	public String extractusername(String token) {
 		return extractClaims(token, Claims::getSubject);
@@ -29,12 +38,12 @@ public class JWTfunctionality implements Serializable {
 	}
 
 	public <T> T extractClaims(String token, Function<Claims, T> claimResolver) {
-		final Claims claims = extractAllClaims(token);
-		return claimResolver.apply(claims);
+		final Jws<Claims> claims = extractAllClaims(token);
+		return claimResolver.apply(claims.getPayload());
 	}
 
-	public Claims extractAllClaims(String token) {
-		return Jwts.parser().setSigningKey(Secret_key).parseClaimsJws(token).getBody();
+	public Jws<Claims> extractAllClaims(String token) {
+		return Jwts.parser().verifyWith(getKey()).build().parseSignedClaims(token);
 	}
 
 	private Boolean IsTokenexpired(String token) {
@@ -48,9 +57,11 @@ public class JWTfunctionality implements Serializable {
 	}
 
 	private String createToken(Map<String, Object> claims, String subject) {
-		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-				.signWith(SignatureAlgorithm.HS256, Secret_key).compact();
+
+		JwtBuilder test = Jwts.builder().claims(claims).subject(subject).issuedAt(new Date(System.currentTimeMillis()))
+				.expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
+				.signWith(getKey());
+		return test.compact();
 	}
 
 	public Boolean validateToken(String token, UserDetails userDetails) {

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -29,20 +30,24 @@ public class SecurityPropery {
     }
 
     @Bean
-    public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration)
+    public AuthenticationManager authenticationManager(HttpSecurity http, NoOpPasswordEncoder noOpPasswordEncoder)
             throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
+        AuthenticationManagerBuilder authenticationManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder.userDetailsService(myuserDetailsService).passwordEncoder(noOpPasswordEncoder);
+        return authenticationManagerBuilder.build();
     }
 
     public void Configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(myuserDetailsService);
 
 	}
+    
 
+    @SuppressWarnings("deprecation")
     @Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    public NoOpPasswordEncoder passwordEncoder() {
+        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+    }
 
 
 }
