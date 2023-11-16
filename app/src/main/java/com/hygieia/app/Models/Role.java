@@ -23,6 +23,8 @@ public class Role {
     @Column(nullable=false, unique=true)
     private String roleName;
 
-    @ManyToMany(mappedBy="roles")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "roleId"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "userId"))
     private List<User> Users;
 }

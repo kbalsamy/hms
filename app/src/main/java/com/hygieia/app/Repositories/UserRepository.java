@@ -7,15 +7,12 @@ import org.springframework.stereotype.Repository;
 
 import com.hygieia.app.Models.User;
 
-
 @Repository
-public interface UserRepository  extends JpaRepository<User,Integer>{
+public interface UserRepository extends JpaRepository<User, Integer> {
 
-    @Query(value="Select * from users u where u.user_name=?1",nativeQuery=true)
+    @Query(value = "Select * from users u where u.user_name=?1", nativeQuery = true)
     User GetuserbyUserName(@Param("username") String userName);
 
-    //User findByUserName(String userName);
+    Boolean existsByUserName(String username);
 
-
-    
-} 
+}

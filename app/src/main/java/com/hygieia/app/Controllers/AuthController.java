@@ -7,14 +7,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.hygieia.app.DTO.AuthResponseDto;
 import com.hygieia.app.DTO.UserDto;
 import com.hygieia.app.DTO.UserLogInDto;
 import com.hygieia.app.DTO.UserRegisterDto;
@@ -33,11 +34,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
 
     @Autowired
-	private UserDetailsService userdetailsservice;
-
-    @Autowired
-	private JWTfunctionality Jwttokenutil;
-    
+    private JWTfunctionality Jwttokenutil;
 
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> Registration(@RequestBody UserRegisterDto user) {
@@ -46,35 +43,29 @@ public class AuthController {
 
         if (userdto == null)
 
-            return ResponseEntity.ok().body("Invalid Email/User already exist");
+            return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
 
-        return ResponseEntity.ok().body("Successfully Registered");
+        return new ResponseEntity<>("Successfully Registered", HttpStatus.OK);
     }
 
     @RequestMapping("/login")
     @ResponseBody
-    public ResponseEntity<?> Login(@RequestBody UserLogInDto userlog) throws Exception {
-
-        String userName = userlog.getUserName();
-        String userPass = userlog.getUserPassword();
-
-        Boolean res = userService.Validate(userName, userPass);
+    public ResponseEntity<AuthResponseDto> Login(@RequestBody UserLogInDto userlog) throws Exception {
 
         try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(userlog.getUserName(), userlog.getUserPassword()));
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            userlog.getUserName(),
+                            userlog.getUserPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            final String jwt = Jwttokenutil.GenerateToken(authentication);
+            return new ResponseEntity<>(new AuthResponseDto(jwt), HttpStatus.BAD_REQUEST);
+
         } catch (BadCredentialsException ex) {
-            throw new Exception("Incorrect username and password");
-        }
-
-        final UserDetails userdet=userdetailsservice.loadUserByUsername(userName);
-        final String jwt = Jwttokenutil.GenerateToken(userdet);
-
-        if (res) {
-            return ResponseEntity.ok(jwt);
+            return new ResponseEntity<>(new AuthResponseDto("incorrect username /password"), HttpStatus.OK);
 
         }
-        return ResponseEntity.ok("Invalid Credentials");
 
     }
 
