@@ -1,30 +1,36 @@
 package com.hygieia.app.Models;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
-@Table(name = "AppointmentDetails")
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "appointments")
 public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int appointmentId;
+    private int id;
+
+    @Column(nullable = false)
+    private int patId;
 
     @Column(nullable = false)
     private int docId;
 
     @Column(nullable = false)
-    private Date dateOfAppointment;
+    private LocalDateTime startTime;
 
-    @CreationTimestamp
     private LocalDateTime dateCreated; 
+
+    private Status status;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="order_id",referencedColumnName="id")
+    private Order orderId;
 
 }

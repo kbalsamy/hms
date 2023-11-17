@@ -4,5 +4,5 @@ import com.hygieia.app.DTO.UserDto;
 import com.hygieia.app.DTO.UserRegisterDto;
 
 public interface IUserService {
-    UserDto saveUser(UserRegisterDto userDto);
+    UserDto savePatient(UserRegisterDto userDto);
 }

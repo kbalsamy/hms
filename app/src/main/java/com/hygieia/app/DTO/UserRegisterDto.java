@@ -1,5 +1,6 @@
 package com.hygieia.app.DTO;
 
+import java.util.Date;
 import lombok.*;
 
 @Getter
@@ -10,8 +11,18 @@ public class UserRegisterDto {
 
     private String userName;
 
-    private String userEmail;
-
     private String userPassword;
+
+    private String firstName;
+
+    private String lasttName;
+
+    private Date dob;
+
+    private String gender;
+
+    private int phoneNo;
+
+    private String address;
     
 }

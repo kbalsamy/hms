@@ -5,32 +5,43 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.hygieia.app.DTO.UserDto;
 import com.hygieia.app.DTO.UserRegisterDto;
-import com.hygieia.app.Models.User;
+import com.hygieia.app.Models.AuthUser;
+import com.hygieia.app.Models.Patient;
 import com.hygieia.app.Repositories.*;
 import com.hygieia.app.Services.Interfaces.IUserService;
 
 @Service
-public class UserService implements IUserService {
+public class UserService {
 
     @Autowired
-    private UserRepository userRepo;
+    private AuthUserRepository AuthUserRepo;
+
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private PatientService patService;
 
-    public UserDto saveUser(UserRegisterDto userregDto) {
+  
 
-        if(userRepo.existsByUserName(userregDto.getUserName())){
+    public Patient saveUser(UserRegisterDto userregDto) {
+
+        if(AuthUserRepo.existsByUserName(userregDto.getUserName())){
             return null;
         }
-        User user = new User();
-        user.setUserName(userregDto.getUserName());
-        user.setUserEmail(userregDto.getUserEmail());
-        user.setUserPassword(passwordEncoder.encode(userregDto.getUserPassword()));
 
-        User usersaved = userRepo.save(user);
-        UserDto userDto = new UserDto(usersaved);
-        return userDto;
+        Patient user = new Patient();
+        user.setUserName(userregDto.getUserName());
+        //user.setUserEmail(userregDto.getUserEmail());
+        // user.setUserPassword(passwordEncoder.encode(userregDto.getUserPassword()));
+        user.setFirstName(userregDto.getFirstName());
+        user.setLasttName(userregDto.getLasttName());
+        user.setDob(userregDto.getDob());
+        user.setGender(userregDto.getGender());
+        user.setPhoneNo(userregDto.getPhoneNo());
+        user.setAddress(userregDto.getAddress());
+
+
+        Patient newPatient = patService.SavePatient(user);
+        return newPatient;
     }
 
 }

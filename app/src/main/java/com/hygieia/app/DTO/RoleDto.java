@@ -1,0 +1,18 @@
+package com.hygieia.app.DTO;
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class RoleDto {
+
+    private String roleName;
+    private List<String> permissions;
+    
+}

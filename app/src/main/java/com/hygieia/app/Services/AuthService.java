@@ -5,32 +5,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.hygieia.app.Repositories.UserRepository;
+import com.hygieia.app.Models.AuthUser;
+import com.hygieia.app.Repositories.AuthUserRepository;
 
 @Service
 public class AuthService {
 
     @Autowired
-    UserRepository userRepo;
+    AuthUserRepository userRepo;
 
-   public User GetUserByUserName(String userName){
+    // @Autowired
+    // PasswordEncoder passwordEncoder;
 
-            com.hygieia.app.Models.User user=userRepo.GetuserbyUserName(userName);
+    public User GetUserByUserName(String userName) {
 
-            User userDet=null;
+        com.hygieia.app.Models.AuthUser user = userRepo.GetuserbyUserName(userName);
 
-            if(user!=null){
-                ArrayList<GrantedAuthority> newAuthorities = new ArrayList<>();
-                
-		
-				newAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
-                userDet=new User(user.getUserName(),user.getUserPassword(),newAuthorities);
-            }
+        User userDet = null;
 
-            return userDet;
+        if (user != null) {
+            ArrayList<GrantedAuthority> newAuthorities = new ArrayList<>();
 
-
+            newAuthorities.add(new SimpleGrantedAuthority("ADMIN"));
+            userDet = new User(user.getUserName(), user.getUserPassword(), newAuthorities);
         }
+
+        return userDet;
+
+    }
+
+    public AuthUser createAuthUser(AuthUser user) {
+
+       // user.setUserPassword(passwordEncoder.encode(user.getUserPassword()));
+        AuthUser authUser = userRepo.save(user);
+
+        return authUser;
+
+    }
 }

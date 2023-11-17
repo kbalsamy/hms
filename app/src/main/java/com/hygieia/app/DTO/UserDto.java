@@ -1,6 +1,6 @@
 package com.hygieia.app.DTO;
 
-import com.hygieia.app.Models.User;
+import com.hygieia.app.Models.AuthUser;
 
 import lombok.*;
 
@@ -9,16 +9,14 @@ import lombok.*;
 
 public class UserDto {
     
-    private int userId;
-    
     private String userName;
     
     private String userEmail;
     
     private String userPassword;
 
-    public UserDto(User user) {
-        this.userId = user.getUserId();
+    public UserDto(AuthUser user) {
+      
         this.userName = user.getUserName();
         this.userPassword = user.getUserPassword();
  }

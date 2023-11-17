@@ -5,13 +5,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.hygieia.app.Models.User;
+import com.hygieia.app.Models.AuthUser;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
+public interface AuthUserRepository extends JpaRepository<AuthUser, Integer> {
 
     @Query(value = "Select * from users u where u.user_name=?1", nativeQuery = true)
-    User GetuserbyUserName(@Param("username") String userName);
+    AuthUser GetuserbyUserName(@Param("username") String userName);
 
     Boolean existsByUserName(String username);
 
