@@ -26,6 +26,8 @@ public class SecurityPropery {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.cors(cor -> cor.disable()).csrf(cs -> cs.disable());
+        // for h2 console to work
+        httpSecurity.headers().frameOptions().sameOrigin();
         return httpSecurity.build();
     }
 
