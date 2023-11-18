@@ -59,22 +59,33 @@ public class EmployeeService {
        
     }
 
-    public List<Employee> findDoctorsByDepartmentId(long id){
+    // public List<Employee> findDoctorsByDepartmentId(long id){
 
         
             
-        List<Employee> employees = empRepo.findEmployeeByDepartmentId(id);
-        List<Employee> doctors = new ArrayList<Employee>();
-        //implement java foreach loop to iterate through arraylist
-        for (Employee employee : employees) {
-            if(employee.getDesignation().equals("doctor")){
-                doctors.add(employee);
-            }
-        }
+    //     List<Employee> employees = empRepo.findEmployeeByDepartmentId(id);
+    //     List<Employee> doctors = new ArrayList<Employee>();
+    //     //implement java foreach loop to iterate through arraylist
+    //     for (Employee employee : employees) {
+    //         if(employee.getDesignation().equals("doctor")){
+    //             doctors.add(employee);
+    //         }
+    //     }
 
-        return doctors;
+    //     return doctors;
+
+
+    // }
+
+    public List<Employee> findDoctorsByDepartmentId(long id, int roleId){
+
+        List<Employee> doctors = empRepo.findAllDoctors(id, roleId);
+            
+       return doctors;
 
 
     }
+
+
 
 }

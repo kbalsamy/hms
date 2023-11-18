@@ -87,12 +87,28 @@ public class EmployeeController {
     }
 
 
-    @GetMapping("/find")
-    public ResponseEntity<ApiResponse> GetdoctorsyDepartmentID(@RequestParam Long depatmentId) {
+    // @GetMapping("/find")
+    // public ResponseEntity<ApiResponse> GetdoctorsyDepartmentID(@RequestParam Long depatmentId) {
+
+    //     try {
+
+    //         List<Employee> employees = employeeService.findDoctorsByDepartmentId(depatmentId);
+
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //                 .body(new ApiResponse(true, "Doctors retrieved successfully", employees));
+    //     } catch (Exception e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(new ApiResponse(false, "Error retrieving doctors", null));
+    //     }
+    // }
+
+
+    @GetMapping("/find/doctors")
+    public ResponseEntity<ApiResponse> Getdoctors(@RequestParam Long depatmentId, @RequestParam int roleId) {
 
         try {
-
-            List<Employee> employees = employeeService.findDoctorsByDepartmentId(depatmentId);
+            
+            List<Employee> employees = employeeService.findDoctorsByDepartmentId(depatmentId,roleId);
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ApiResponse(true, "Doctors retrieved successfully", employees));
