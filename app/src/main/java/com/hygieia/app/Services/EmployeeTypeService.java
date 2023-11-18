@@ -8,11 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hygieia.app.DTO.EmployeeTypeDto;
-import com.hygieia.app.DTO.RoleDto;
 import com.hygieia.app.Models.EmployeeType;
-import com.hygieia.app.Models.Role;
 import com.hygieia.app.Repositories.EmployeeTypeRepository;
-import com.hygieia.app.Repositories.RoleRepository;
 
 @Service
 public class EmployeeTypeService {

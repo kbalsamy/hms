@@ -14,13 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hygieia.app.DTO.RoleDto;
-import com.hygieia.app.Models.Department;
 import com.hygieia.app.Models.Role;
-import com.hygieia.app.Repositories.RoleRepository;
 import com.hygieia.app.Services.ApiResponse;
 import com.hygieia.app.Services.RoleService;
-
-import jakarta.persistence.Entity;
 
 @RestController
 @CrossOrigin

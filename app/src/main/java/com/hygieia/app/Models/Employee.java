@@ -63,6 +63,7 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
+    @JsonIgnore
     private EmployeeType emptype;
 
     @ManyToOne

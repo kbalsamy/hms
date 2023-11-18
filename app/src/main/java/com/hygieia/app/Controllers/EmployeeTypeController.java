@@ -14,11 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hygieia.app.DTO.EmployeeTypeDto;
-import com.hygieia.app.DTO.UserRegisterDto;
-import com.hygieia.app.Models.AuthUser;
 import com.hygieia.app.Models.EmployeeType;
-import com.hygieia.app.Models.Patient;
-import com.hygieia.app.Models.Role;
 import com.hygieia.app.Services.ApiResponse;
 import com.hygieia.app.Services.EmployeeTypeService;
 

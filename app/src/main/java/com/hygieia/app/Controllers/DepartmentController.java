@@ -13,18 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.hygieia.app.DTO.DepartmentDto;
 import com.hygieia.app.Models.Department;
-import com.hygieia.app.Repositories.DepartmentRepository;
 import com.hygieia.app.Services.ApiResponse;
 import com.hygieia.app.Services.DepartmentService;
-
-
-
-
-
-
 
 @RestController
 @RequestMapping("/api/v1/department")
@@ -71,15 +63,12 @@ public class DepartmentController {
             existingDepartment.setDescription(department.getDescription());
             departmentService.updateDepartment(existingDepartment);
             // logger.logInfo("Org Unit updated successfully");
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Org Unit updated successfully", existingDepartment));
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Department updated successfully", existingDepartment));
         }catch(ResourceNotFoundException e){
             // logger.logError("Org Unit update failed", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, e.getMessage(), null));
         }
     }
-
-    
-    //TODO: add delete functionality later
 
 
 
@@ -88,9 +77,9 @@ public class DepartmentController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getDepartmentById(@PathVariable Long id) {
         try{
-            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Org Unit retrieved successfully", departmentService.findDepartmentById(id)));
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Department retrieved successfully", departmentService.findDepartmentById(id)));
         }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Error retrieving org unit", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, "Error retrieving department", null));
         }
     }
 

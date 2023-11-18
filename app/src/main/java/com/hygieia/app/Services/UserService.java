@@ -1,14 +1,10 @@
 package com.hygieia.app.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.hygieia.app.DTO.UserDto;
 import com.hygieia.app.DTO.UserRegisterDto;
-import com.hygieia.app.Models.AuthUser;
 import com.hygieia.app.Models.Patient;
 import com.hygieia.app.Repositories.*;
-import com.hygieia.app.Services.Interfaces.IUserService;
 
 @Service
 public class UserService {

@@ -7,12 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.hygieia.app.DTO.RoleDto;
-import com.hygieia.app.DTO.UserDto;
-import com.hygieia.app.DTO.UserRegisterDto;
-import com.hygieia.app.Models.AuthUser;
 import com.hygieia.app.Models.Role;
 import com.hygieia.app.Repositories.RoleRepository;
-import com.hygieia.app.Repositories.AuthUserRepository;
 
 @Service
 public class RoleService {

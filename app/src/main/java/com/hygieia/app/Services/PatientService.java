@@ -1,9 +1,9 @@
 package com.hygieia.app.Services;
 
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.hygieia.app.DTO.UserRegisterDto;
 import com.hygieia.app.Models.Patient;
 import com.hygieia.app.Repositories.PatientRepository;
 
@@ -26,5 +26,13 @@ public class PatientService {
 
         
     }
+
+     public Optional<Patient> findPatientById(int id){
+
+        return patRepo.findById(id);
+
+       
+    }
+
     
 }

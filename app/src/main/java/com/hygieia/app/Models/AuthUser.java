@@ -1,9 +1,5 @@
 package com.hygieia.app.Models;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import jakarta.persistence.*;
 import lombok.*;
 
