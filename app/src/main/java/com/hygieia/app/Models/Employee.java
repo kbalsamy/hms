@@ -62,7 +62,7 @@ public class Employee {
     private String address;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "empType_id", nullable = false)
     @JsonIgnore
     private EmployeeType emptype;
 

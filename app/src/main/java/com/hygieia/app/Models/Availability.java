@@ -12,6 +12,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.*;
 
 @Entity
@@ -34,11 +37,8 @@ public class Availability {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
+    @JsonIgnore
     private Employee employee;
-
-    
-     
-       
 
     
 }
