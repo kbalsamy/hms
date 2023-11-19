@@ -1,8 +1,6 @@
 package com.hygieia.app.DTO;
 
-import java.time.LocalDateTime;
-
-import com.hygieia.app.Models.Status;
+import com.hygieia.app.Models.PaymentType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,12 +13,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AppointmentDto {
+public class OrderDto {
+
+    float amount;
+
+    PaymentType paymentType;
 
     int patientId;
-    int docId;
-    LocalDateTime startTime;
-    Status status;
-    int orderId;
+
+    int appointmentId;
     
 }

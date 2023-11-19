@@ -1,6 +1,11 @@
 package com.hygieia.app.Models;
 
 import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,21 +21,29 @@ public class Appointment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(nullable = false)
-    private int patId;
+    
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)  
+    @JsonIgnore
+    private Patient patient;
 
-    @Column(nullable = false)
-    private int docId;
+    
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", nullable = false)  
+    @JsonIgnore
+    private Employee employee;
 
     @Column(nullable = false)
     private LocalDateTime startTime;
 
+    @CreationTimestamp
     private LocalDateTime dateCreated; 
 
     private Status status;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="order_id",referencedColumnName="id")
+    
     private Order orderId;
 
 }

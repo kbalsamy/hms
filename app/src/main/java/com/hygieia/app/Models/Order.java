@@ -2,10 +2,17 @@ package com.hygieia.app.Models;
 
 import java.time.*;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -28,9 +35,22 @@ public class Order {
 
     private float amount;
 
+    private PaymentType paymentType;
+
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id", nullable = false)
+    @JsonIgnore
+    private Patient patient;
+
+
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @OneToOne(mappedBy = "orderId")
+    @JsonIgnore
     private Appointment appointment;
+
+    
 
 }

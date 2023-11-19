@@ -5,12 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -44,5 +46,13 @@ public class Patient {
 
     @Column(nullable = false, unique = false)
     private String address;
+
+    @OneToMany(mappedBy = "patient")
+    private List<Order> orders;
+
+    @OneToMany(mappedBy = "patient")
+    private List<Appointment> appointments;
+
+    
 
 }
