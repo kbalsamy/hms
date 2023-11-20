@@ -118,21 +118,18 @@ public class AppointmentController {
         }
     }
 
-    // @PostMapping("/confirm/payments")
-    // public ResponseEntity<ApiResponse> ConfirmPayment(@RequestBody UserPaymentDto userPayDto ){
+    @PostMapping("/confirm/payment")
+    public ResponseEntity<ApiResponse> ConfirmPayment(@RequestBody UserPaymentDto userPayDto ){
 
-    //     try{
-    //             //appointmentService.initAppoinment(1,2,reqDto.getTiming());
-    //         paymentService.HandlePayment();
-            
-    //         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Appoinment initiated request for payment", response));
+        try{            
+            Appointment appointment = paymentService.confirmPayment(userPayDto);            
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Appoinment confirmed", appointment));
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, e.getMessage(), null));
 
-    //     }
-    //     catch(Exception e){
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, e.getMessage(), null));
+        }
 
-    //     }
-
-    // }
+    }
     
 }

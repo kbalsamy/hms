@@ -13,6 +13,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserPaymentDto {
 
+    private int appointmentId;
+
     private int patientId;
 
     private PaymentType paymentType;
