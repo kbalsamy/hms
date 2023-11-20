@@ -6,6 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type payment interface {
+	Pay()
+}
+
 type BasePaymentControl struct {
 }
 
