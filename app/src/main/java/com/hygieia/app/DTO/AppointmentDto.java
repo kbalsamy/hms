@@ -2,6 +2,7 @@ package com.hygieia.app.DTO;
 
 import java.time.LocalDateTime;
 
+import com.hygieia.app.Models.AppointmentType;
 import com.hygieia.app.Models.Status;
 
 import lombok.AllArgsConstructor;
@@ -20,7 +21,8 @@ public class AppointmentDto {
     int patientId;
     int docId;
     LocalDateTime startTime;
-    Status status;
+    String status;
     int orderId;
+    AppointmentType appointmentType;
     
 }

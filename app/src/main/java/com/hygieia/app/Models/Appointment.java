@@ -17,6 +17,10 @@ import lombok.*;
 @Table(name = "appointments")
 public class Appointment {
 
+
+    // @Setter(AccessLevel.NONE)
+    // private String defStatus="PENDING";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -38,12 +42,23 @@ public class Appointment {
 
     @CreationTimestamp
     private LocalDateTime dateCreated; 
-
-    private Status status;
+    
+    @Column(columnDefinition = "boolean default true")
+    private String status;
 
     @OneToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="order_id",referencedColumnName="id")
     
     private Order orderId;
+
+    private float amount;
+
+
+    // public void setStatus(String status){
+    //    if (status == null){
+    //     this.status = this.defStatus;
+    //    }
+    // }
+
 
 }

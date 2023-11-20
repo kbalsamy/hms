@@ -1,5 +1,6 @@
 package com.hygieia.app.Controllers;
 
+import org.apache.commons.collections.functors.ExceptionClosure;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hygieia.app.DTO.AppointmentDto;
+import com.hygieia.app.DTO.AppointmentRequestDto;
+import com.hygieia.app.DTO.AppointmentResponseDto;
+import com.hygieia.app.DTO.UserPaymentDto;
 import com.hygieia.app.Models.Appointment;
 import com.hygieia.app.Models.Department;
 import com.hygieia.app.Repositories.EmployeeRepository;
@@ -21,6 +25,7 @@ import com.hygieia.app.Repositories.OrderRepository;
 import com.hygieia.app.Repositories.PatientRepository;
 import com.hygieia.app.Services.ApiResponse;
 import com.hygieia.app.Services.AppointmentService;
+import com.hygieia.app.Services.PaymentService;
 
 @RestController
 @CrossOrigin
@@ -38,6 +43,9 @@ public class AppointmentController {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private PaymentService paymentService;
 
 
     // create a new appointment
@@ -82,6 +90,7 @@ public class AppointmentController {
             existingAppointment.setStartTime(appointmentDto.getStartTime());
             existingAppointment.setStatus(appointmentDto.getStatus());
             existingAppointment.setOrderId(orderRepository.findById(appointmentDto.getOrderId()).get());
+            
             Appointment updatedAppoinment = appointmentService.updateAppoinment(existingAppointment);
 
             // logger.logInfo("Org Unit updated successfully");
@@ -92,10 +101,38 @@ public class AppointmentController {
         }
     }
 
+    @PostMapping("/request")
+    public ResponseEntity<ApiResponse> requestAppoinment(@RequestBody AppointmentRequestDto reqDto){
 
+        
+        try{
+                //appointmentService.initAppoinment(1,2,reqDto.getTiming());
+            AppointmentResponseDto response=appointmentService.checkAppointmentSlot(reqDto);
+            
+            return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Appoinment initiated request for payment", response));
 
-    
+        }
+        catch(Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, e.getMessage(), null));
 
-    
+        }
+    }
+
+    // @PostMapping("/confirm/payments")
+    // public ResponseEntity<ApiResponse> ConfirmPayment(@RequestBody UserPaymentDto userPayDto ){
+
+    //     try{
+    //             //appointmentService.initAppoinment(1,2,reqDto.getTiming());
+    //         paymentService.HandlePayment();
+            
+    //         return ResponseEntity.status(HttpStatus.OK).body(new ApiResponse(true, "Appoinment initiated request for payment", response));
+
+    //     }
+    //     catch(Exception e){
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(false, e.getMessage(), null));
+
+    //     }
+
+    // }
     
 }
