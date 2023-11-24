@@ -13,17 +13,10 @@ import com.hygieia.app.Services.Observers.Bill;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
-
-    @Autowired
-    private AppointmentService appointmentService;
-    private OrderRepository orderRepository;
-    private PatientRepository patientRepository;
-
 
      public List<Bill> observers = new ArrayList<>();
 

@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.hygieia.app.DTO.AvailabilityDto;
 import com.hygieia.app.Models.Availability;
 import com.hygieia.app.Services.ApiResponse;

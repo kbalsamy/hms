@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.hygieia.app.Services.Interfaces.IAppointment;
-
 @Configuration
 @EnableWebSecurity
 @EnableWebMvc

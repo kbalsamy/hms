@@ -1,6 +1,5 @@
 package com.hygieia.app.Controllers;
 
-import org.apache.commons.collections.functors.ExceptionClosure;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,6 @@ import com.hygieia.app.DTO.AppointmentRequestDto;
 import com.hygieia.app.DTO.AppointmentResponseDto;
 import com.hygieia.app.DTO.UserPaymentDto;
 import com.hygieia.app.Models.Appointment;
-import com.hygieia.app.Models.Department;
 import com.hygieia.app.Repositories.EmployeeRepository;
 import com.hygieia.app.Repositories.OrderRepository;
 import com.hygieia.app.Repositories.PatientRepository;

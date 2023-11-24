@@ -1,11 +1,9 @@
 package com.hygieia.app.Services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.hygieia.app.DTO.EmployeeRegDto;
 import com.hygieia.app.Models.Department;
 import com.hygieia.app.Models.Employee;
@@ -36,8 +34,6 @@ public class EmployeeService {
 
         Employee emp = new Employee();
         emp.setUserName(empregDto.getUserName());
-        // user.setUserEmail(userregDto.getUserEmail());
-        // user.setUserPassword(passwordEncoder.encode(userregDto.getUserPassword()));
         emp.setFirstName(empregDto.getFirstName());
         emp.setLasttName(empregDto.getLasttName());
         emp.setDob(empregDto.getDob());
