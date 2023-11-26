@@ -21,8 +21,6 @@ func (con MobileAccountController) Pay(c *gin.Context) {
 	if err != nil {
 		// do something sensible
 	}
-	var mobile *models.Mobile
-	var debit *models.Debit
 	amount := float32(value)
 	// amount := float32(c.Query("amount"))
 	// begin a transaction
@@ -36,16 +34,18 @@ func (con MobileAccountController) Pay(c *gin.Context) {
 	//perform some db operations in the transaction（From here，I should use"tx" instead of "db"）
 	//user transfer money to hospital
 	// transferor going to transfer mondy to someone
-	u1 := models.DB.First(&mobile, transferorId)
+	var ul *models.Mobile
+	u1 := models.DB.First(&ul, models.DB.Where("Phonenumber = ?", transferorId))
 	if u1.Error != nil {
 		tx.Rollback()
-		con.error(c, "Collection account abnormal")
+		con.error(c, "Collection account abnormal2")
 		return
 	}
-	ul := models.Mobile{Id: transferorId}
-	tx.Find(&ul)
+	tx.Find(&ul, models.DB.Where("Phonenumber = ?", transferorId))
+	// ul := models.Mobile{Id: transferorId}
+	// tx.Find(&ul)
 	ul.Balance = ul.Balance - amount
-	if err := tx.Save(&ul).Error; err != nil {
+	if err := tx.Save(&ul).Error; err != nil || ul.Balance < 0 {
 		tx.Rollback()
 		con.error(c, "Payment account abnormal")
 		return
@@ -53,19 +53,19 @@ func (con MobileAccountController) Pay(c *gin.Context) {
 	// panic("exception")
 	//hospital account increasedy by amount
 	//payee get incremented money amount
-	u3 := models.DB.First(&debit, payeeId)
+	var u2 *models.Debit
+	u4 := models.DB.First(&u2, models.DB.Where("Accountnumber = ?", payeeId))
 
-	if u3.Error != nil {
+	if u4.Error != nil {
 		tx.Rollback()
-		con.error(c, "Collection account abnormal")
+		con.error(c, "Collection account abnormal3")
 		return
 	}
-	u2 := models.Debit{Id: payeeId}
-	tx.Find(&u2)
+	tx.Find(&u2, models.DB.Where("Accountnumber = ?", payeeId))
 	u2.Balance = u2.Balance + amount
 	if err := tx.Save(&u2).Error; err != nil {
 		tx.Rollback()
-		con.error(c, "Collection account abnormal")
+		con.error(c, "Collection account abnormal1")
 		return
 	}
 
