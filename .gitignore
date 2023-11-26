@@ -42,3 +42,7 @@ settings.json
 appLogs.json
 
 appLogs.json.1
+
+payment/conf/app.ini
+
+appsLogs.json.lck
