@@ -14,15 +14,14 @@ type DebitCardAccountController struct {
 
 func (con DebitCardAccountController) Pay(c *gin.Context) {
 	fmt.Println("=====debit")
-	transferorId, _ := strconv.Atoi(c.Query("transferorId"))
-	payeeId, _ := strconv.Atoi(c.Query("payeeId"))
+	transferorId, _ := strconv.ParseInt(c.Query("transferorId"), 10, 64)
+	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
 	value, err := strconv.ParseFloat(c.Query("amount"), 32)
 
 	if err != nil {
 		// do something sensible
 	}
 	amount := float32(value)
-	// amount := float32(c.Query("amount"))
 	// begin a transaction
 	tx := models.DB.Begin()
 	defer func() {

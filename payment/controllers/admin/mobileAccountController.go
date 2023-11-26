@@ -14,8 +14,8 @@ type MobileAccountController struct {
 
 func (con MobileAccountController) Pay(c *gin.Context) {
 	fmt.Println("+++++mobile")
-	transferorId, _ := strconv.Atoi(c.Query("transferorId"))
-	payeeId, _ := strconv.Atoi(c.Query("payeeId"))
+	transferorId := c.Query("transferorId")
+	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
 	value, err := strconv.ParseFloat(c.Query("amount"), 32)
 
 	if err != nil {

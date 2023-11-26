@@ -14,8 +14,8 @@ type CreditCardAccountController struct {
 
 func (con CreditCardAccountController) Pay(c *gin.Context) {
 	fmt.Println("-----credit")
-	transferorId, _ := strconv.Atoi(c.Query("transferorId"))
-	payeeId, _ := strconv.Atoi(c.Query("payeeId"))
+	transferorId, _ := strconv.ParseInt(c.Query("transferorId"), 10, 64)
+	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
 	value, err := strconv.ParseFloat(c.Query("amount"), 32)
 
 	if err != nil {

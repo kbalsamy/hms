@@ -1,7 +1,7 @@
 package models
 
 type Mobile struct {
-	Id          int
+	Id          string
 	Username    string
 	Expirydate  string
 	Balance     float32

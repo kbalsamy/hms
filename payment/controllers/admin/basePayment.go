@@ -31,6 +31,10 @@ func (con BasePaymentControl) Pay(c *gin.Context) {
 
 func (con BasePaymentControl) success(c *gin.Context) {
 	c.String(http.StatusOK, "success")
+	// {
+	// 	paymentReferenceId: random
+	// 	message: "success"
+	// }
 }
 func (con BasePaymentControl) error(c *gin.Context, errInfo string) {
 	if errInfo == "" {
