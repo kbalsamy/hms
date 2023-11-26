@@ -31,6 +31,7 @@ func (con DebitCardAccountController) Pay(c *gin.Context) {
 			con.error(c, "failure of transaction")
 		}
 	}()
+	// select * from debit
 	// transferor going to transfer mondy to someone
 	ul := models.Debit{Id: transferorId}
 	tx.Find(&ul)
