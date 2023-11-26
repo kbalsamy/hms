@@ -26,14 +26,13 @@ public class UserService {
 
         Patient user = new Patient();
         user.setUserName(userregDto.getUserName());
-        //user.setUserEmail(userregDto.getUserEmail());
-        // user.setUserPassword(passwordEncoder.encode(userregDto.getUserPassword()));
         user.setFirstName(userregDto.getFirstName());
         user.setLasttName(userregDto.getLasttName());
         user.setDob(userregDto.getDob());
         user.setGender(userregDto.getGender());
         user.setPhoneNo(userregDto.getPhoneNo());
         user.setAddress(userregDto.getAddress());
+        user.setHealthPlan(userregDto.getHealthPlan());
 
 
         Patient newPatient = patService.SavePatient(user);

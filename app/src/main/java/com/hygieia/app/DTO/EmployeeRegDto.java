@@ -6,9 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Date;
 
-import com.hygieia.app.Models.Department;
-import com.hygieia.app.Models.EmployeeType;
-
 @Getter
 @Setter
 @NoArgsConstructor

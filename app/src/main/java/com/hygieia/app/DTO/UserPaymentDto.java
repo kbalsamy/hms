@@ -29,5 +29,7 @@ public class UserPaymentDto {
 
     private String phoneNo;
 
+    private String healthPlan;
+
     
 }

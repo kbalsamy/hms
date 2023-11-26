@@ -3,8 +3,6 @@ package com.hygieia.app.DTO;
 import java.time.LocalDateTime;
 
 import com.hygieia.app.Models.AppointmentType;
-import com.hygieia.app.Models.Status;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

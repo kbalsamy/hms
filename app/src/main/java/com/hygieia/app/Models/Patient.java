@@ -47,6 +47,9 @@ public class Patient {
     @Column(nullable = false, unique = false)
     private String address;
 
+    @Column(nullable = false, unique = false)
+    private String healthPlan;
+
     @OneToMany(mappedBy = "patient")
     private List<Order> orders;
 

@@ -24,5 +24,7 @@ public class UserRegisterDto {
     private int phoneNo;
 
     private String address;
+
+    private String healthPlan;
     
 }

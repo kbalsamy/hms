@@ -1,13 +1,8 @@
 package com.hygieia.app.Services;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import com.hygieia.app.DTO.UserPaymentDto;
 import com.hygieia.app.Models.Appointment;
-import com.hygieia.app.Models.Order;
-import com.hygieia.app.Repositories.AppoinmentRepository;
-import com.hygieia.app.Repositories.OrderRepository;
-import com.hygieia.app.Repositories.PatientRepository;
 import com.hygieia.app.Services.Observers.Bill;
 
 import java.util.List;
@@ -25,9 +20,9 @@ public class PaymentService {
         observers.add(observer);
     }
 
-    public void notifyAllObservers() {
+    public void notifyAllObservers(UserPaymentDto userPaymentDto) {
         for (Bill observer : observers) {
-            observer.update();
+            observer.update(userPaymentDto);
         }
     }
 
@@ -67,14 +62,15 @@ public class PaymentService {
         appointment.setStatus("booked");
         // appointmentService.updateAppoinment(appointment);
         // notify all observers
-        this.notifyAllObservers();
+        this.notifyAllObservers(userPayDto);
         return appointment;
             
         
        
     }catch(Exception e){
-        new Exception("Server error");
-        return null;
+
+        System.out.println(e.getMessage());
+       return null;
     }
 
     }

@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 import com.hygieia.AppLogger.AppLogger;
-import com.hygieia.app.Repositories.EmployeeRepository;
+import com.hygieia.app.Services.PatientService;
 import com.hygieia.app.Services.PaymentService;
 import com.hygieia.app.Services.Observers.Bill;
 
@@ -21,6 +21,9 @@ public class AppApplication {
 	@Autowired
 	PaymentService paymentService;
 
+	@Autowired
+	PatientService patientService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(AppApplication.class, args);
 	}
@@ -31,7 +34,7 @@ public class AppApplication {
 		logger = AppLogger.getInstance();
 		logger.logInfo("Logger initialized");
 		// attach observers here
-		Bill bill = new Bill();		
+		Bill bill = new Bill(patientService);		
 		
 		paymentService.attach(bill);
 	}
