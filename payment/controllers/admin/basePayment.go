@@ -41,6 +41,6 @@ func (con BasePaymentControl) error(c *gin.Context, errInfo string) {
 		errInfo = "error"
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"message": "failure",
+		"message": errInfo,
 	})
 }
