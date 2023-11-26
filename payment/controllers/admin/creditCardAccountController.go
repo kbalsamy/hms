@@ -21,6 +21,8 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 	if err != nil {
 		// do something sensible
 	}
+	var debit *models.Debit
+	var credit *models.Credit
 	amount := float32(value)
 	// begin a transaction
 	tx := models.DB.Begin()
@@ -31,6 +33,12 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 		}
 	}()
 	// transferor going to transfer mondy to someone
+	u1 := models.DB.First(&credit, transferorId)
+	if u1.Error != nil {
+		tx.Rollback()
+		con.error(c, "Collection account abnormal")
+		return
+	}
 	ul := models.Credit{Id: transferorId}
 	tx.Find(&ul)
 	ul.Amount = ul.Amount + amount
@@ -41,6 +49,13 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 	}
 	// panic("exception")
 	//payee get incremented money amount
+	u3 := models.DB.First(&debit, payeeId)
+
+	if u3.Error != nil {
+		tx.Rollback()
+		con.error(c, "Collection account abnormal")
+		return
+	}
 	u2 := models.Debit{Id: payeeId}
 	tx.Find(&u2)
 	u2.Balance = u2.Balance + amount
