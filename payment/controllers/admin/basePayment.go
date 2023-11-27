@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"HMS/payment/models"
 	"errors"
 	"math/rand"
 	"net/http"
@@ -17,6 +18,14 @@ type BasePaymentControl struct {
 }
 
 func (con BasePaymentControl) Pay(c *gin.Context) {
+	_, payeeId, amount, err := con.getParameters(c)
+	if err != nil {
+		return
+	}
+	verifyerr := con.VerifyNumver(c, payeeId, amount)
+	if verifyerr != nil {
+		return
+	}
 	payMethod := c.Query("payMethod")
 	/*
 	* {'DEBIT_CARD':debit, 'CREDIT_CARD':credit, 'MOBILE_PAY':mobile}
@@ -39,9 +48,21 @@ func (con BasePaymentControl) getParameters(c *gin.Context) (int64, int64, float
 	if err != nil || amount <= 0 {
 		// do something sensible
 		con.error(c, "wrong amount")
-		return 0, 0, 0, errors.New("Matrix dimensions are not compatible for multiplication")
+		return 0, 0, 0, errors.New("Wrong amount")
 	}
 	return transferorId, payeeId, amount, nil
+}
+
+func (con BasePaymentControl) VerifyNumver(c *gin.Context, payeeId int64, amount float32) error {
+	// verify payeeId
+	var u2 *models.Debit
+	u3 := models.DB.First(&u2, models.DB.Where("Accountnumber = ?", payeeId))
+
+	if u3.Error != nil {
+		con.error(c, "payee not found")
+		return errors.New("payee not found")
+	}
+	return nil
 }
 
 func (con BasePaymentControl) success(c *gin.Context) {
