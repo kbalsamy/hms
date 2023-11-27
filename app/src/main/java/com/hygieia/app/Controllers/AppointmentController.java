@@ -4,6 +4,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,6 +49,7 @@ public class AppointmentController {
 
     // create a new appointment
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> createAppointment(@RequestBody AppointmentDto appointmentDto) {
         try{
             Appointment appointment = appointmentService.createAppointment(appointmentDto);
@@ -79,6 +81,7 @@ public class AppointmentController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> updateAppoinment(@RequestBody AppointmentDto appointmentDto, @PathVariable int id) {
         try{
             Appointment existingAppointment = appointmentService.findAppointmentById(id).orElseThrow(()->new ResourceNotFoundException(
@@ -100,6 +103,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/request")
+    @PreAuthorize("hasAnyAuthorties('ROLE_ADMIN', 'ROLE_PATIENT')")    
     public ResponseEntity<ApiResponse> requestAppoinment(@RequestBody AppointmentRequestDto reqDto){
 
         
@@ -117,6 +121,7 @@ public class AppointmentController {
     }
 
     @PostMapping("/confirm/payment")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> ConfirmPayment(@RequestBody UserPaymentDto userPayDto ){
 
         try{            

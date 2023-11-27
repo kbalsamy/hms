@@ -3,7 +3,7 @@ package com.hygieia.app.Controllers;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +27,7 @@ public class AvailabilityController {
 
     // create availability
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> createAvailability(@RequestBody AvailabilityDto availabilityDto) {
         try{
             
@@ -42,6 +43,7 @@ public class AvailabilityController {
     // update availability
 
     @PutMapping("/{id}")
+    
     public ResponseEntity<ApiResponse> updateAvailability(@RequestBody AvailabilityDto availabilityDto, @PathVariable int id) {
         try{
 

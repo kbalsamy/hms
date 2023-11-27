@@ -4,6 +4,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class RoleController {
     
     // create a new department
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> createRole(@RequestBody RoleDto roleDto) {
         try{
             
@@ -46,7 +48,7 @@ public class RoleController {
     }
 
     //get all departments
-    @GetMapping("/all")
+    @GetMapping("/all")    
     public ResponseEntity<ApiResponse> getAllRoles() {
         try{
             return ResponseEntity.ok(new ApiResponse(true, "Departments fetched successfully", roleService.getAllRoles()));
@@ -57,6 +59,7 @@ public class RoleController {
 
      //update an existing department   
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> updateRoles(@RequestBody RoleDto roleDto, @PathVariable int id) {
         try{
             Role existingRole = roleService.findRoleById(id).orElseThrow(()->new ResourceNotFoundException(

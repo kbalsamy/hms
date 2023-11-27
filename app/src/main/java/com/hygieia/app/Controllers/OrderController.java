@@ -7,6 +7,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class OrderController {
     AppointmentService appointmentService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> createOrder(@RequestBody OrderDto orderDto) {
 
         try{
@@ -53,6 +55,7 @@ public class OrderController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> getAllOrders() {
         try{
             return ResponseEntity.ok(new ApiResponse(true, "Orders fetched successfully", orderService.getAllOrders()));
@@ -62,6 +65,7 @@ public class OrderController {
     }
 
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> updateOrder(@RequestBody OrderDto orderDto, @PathVariable int id) {
         try{           
             
@@ -80,6 +84,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> getOrderById(@PathVariable int id) {
         try{
 

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import com.hygieia.app.DTO.AuthResponseDto;
 import com.hygieia.app.DTO.UserLogInDto;
 import com.hygieia.app.DTO.UserRegisterDto;
@@ -98,6 +100,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> GetPatientById(@PathVariable int id) {
 
         try {
