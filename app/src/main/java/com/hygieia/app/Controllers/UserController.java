@@ -15,23 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import com.hygieia.app.DTO.AuthResponseDto;
 import com.hygieia.app.DTO.UserLogInDto;
 import com.hygieia.app.DTO.UserRegisterDto;
 import com.hygieia.app.Models.AuthUser;
 import com.hygieia.app.Models.Patient;
 import com.hygieia.app.Models.Role;
-import com.hygieia.app.Security.JWTfunctionality;
 import com.hygieia.app.Services.ApiResponse;
 import com.hygieia.app.Services.AuthService;
 import com.hygieia.app.Services.PasswordService;
 import com.hygieia.app.Services.PatientService;
 import com.hygieia.app.Services.RoleService;
+import com.hygieia.app.Services.TokenService;
 import com.hygieia.app.Services.UserService;
 
 @RestController
@@ -52,13 +47,10 @@ public class UserController {
     private PatientService patientService;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JWTfunctionality Jwttokenutil;
-
-    @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private TokenService tokenService;
 
     // patient registration api
     @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -95,17 +87,11 @@ public class UserController {
     public ResponseEntity<AuthResponseDto> Login(@RequestBody UserLogInDto userlog) throws Exception {
 
         try {
-            Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            userlog.getUserName(),
-                            userlog.getUserPassword()));
+            final String jwt = tokenService.GenerateToken(userlog);
+            return new ResponseEntity<>(new AuthResponseDto(jwt), HttpStatus.OK);
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            final String jwt = Jwttokenutil.GenerateToken(authentication);
-            return new ResponseEntity<>(new AuthResponseDto(jwt), HttpStatus.BAD_REQUEST);
-
-        } catch (BadCredentialsException ex) {
-            return new ResponseEntity<>(new AuthResponseDto("incorrect username /password"), HttpStatus.OK);
+        } catch (Exception ex) {
+            return new ResponseEntity<>(new AuthResponseDto("incorrect username /password"), HttpStatus.UNAUTHORIZED);
 
         }
 
@@ -119,10 +105,10 @@ public class UserController {
             Patient pat = patientService.findPatientById(id).orElseThrow(() -> new ResourceNotFoundException(
                     "Patient not found"));
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ApiResponse(true, "Employee retrieved successfully", pat));
+                    .body(new ApiResponse(true, "Patient retrieved successfully", pat));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse(false, "Error retrieving Employee", null));
+                    .body(new ApiResponse(false, "Error retrieving Patient", null));
         }
     }
 
