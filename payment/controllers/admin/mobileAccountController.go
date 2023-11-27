@@ -3,7 +3,6 @@ package admin
 import (
 	"HMS/payment/models"
 	"fmt"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,16 +14,10 @@ type MobileAccountController struct {
 func (con MobileAccountController) Pay(c *gin.Context) {
 	fmt.Println("+++++mobile")
 	transferorId := c.Query("transferorId")
-	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
-	value, err := strconv.ParseFloat(c.Query("amount"), 32)
-
-	if err != nil || value <= 0 {
-		// do something sensible
-		con.error(c, "wrong amount")
+	_, payeeId, amount, err := con.getParameters(c)
+	if err != nil {
 		return
 	}
-	amount := float32(value)
-	// amount := float32(c.Query("amount"))
 	// begin a transaction
 	tx := models.DB.Begin()
 	defer func() {

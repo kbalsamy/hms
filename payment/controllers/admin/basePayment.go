@@ -1,8 +1,10 @@
 package admin
 
 import (
+	"errors"
 	"math/rand"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,6 +30,18 @@ func (con BasePaymentControl) Pay(c *gin.Context) {
 	} else {
 		c.String(http.StatusOK, "wrong payment method")
 	}
+}
+func (con BasePaymentControl) getParameters(c *gin.Context) (int64, int64, float32, error) {
+	transferorId, _ := strconv.ParseInt(c.Query("transferorId"), 10, 64)
+	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
+	value, err := strconv.ParseFloat(c.Query("amount"), 32)
+	amount := float32(value)
+	if err != nil || amount <= 0 {
+		// do something sensible
+		con.error(c, "wrong amount")
+		return 0, 0, 0, errors.New("Matrix dimensions are not compatible for multiplication")
+	}
+	return transferorId, payeeId, amount, nil
 }
 
 func (con BasePaymentControl) success(c *gin.Context) {
