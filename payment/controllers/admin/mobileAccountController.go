@@ -18,8 +18,10 @@ func (con MobileAccountController) Pay(c *gin.Context) {
 	payeeId, _ := strconv.ParseInt(c.Query("payeeId"), 10, 64)
 	value, err := strconv.ParseFloat(c.Query("amount"), 32)
 
-	if err != nil {
+	if err != nil || value <= 0 {
 		// do something sensible
+		con.error(c, "wrong amount")
+		return
 	}
 	amount := float32(value)
 	// amount := float32(c.Query("amount"))
