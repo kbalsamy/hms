@@ -53,8 +53,8 @@ public class PaymentService {
         WebClient webClient = WebClient.create();
 
         // Define the URL of the API endpoint for external payment gateway
-        String apiUrl = "http://localhost:9091/pay?transferorId=1&payeeId=1000&amount=%d&payMethod=1";
-
+        String apiUrl = String.format("http://localhost:9091/pay?transferorId=%s&payeeId=1000&amount=%.2f&payMethod=%s",userPayDto.getCard(), amount, userPayDto.getPaymentType() );
+            System.out.println(apiUrl);
         // Make a GET request and retrieve the response
         ClientResponse response = webClient.get()
                 .uri(apiUrl)
@@ -66,6 +66,7 @@ public class PaymentService {
             return null;
         }
         String responseBody = response.bodyToMono(String.class).block();
+        System.out.println(responseBody);
 
         // create order
         Order order = new Order();
