@@ -43,7 +43,8 @@ public class Appointment {
     @CreationTimestamp
     private LocalDateTime dateCreated; 
     
-    @Column(columnDefinition = "boolean default true")
+    // @Column(columnDefinition = "boolean default true")
+    @Column(nullable = false)
     private String status;
 
     @OneToOne(cascade=CascadeType.ALL)

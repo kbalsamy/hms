@@ -50,12 +50,19 @@ public class Patient {
     @Column(nullable = false, unique = false)
     private String healthPlan;
 
+    //  @Column(nullable = false, unique = false)
+    // private String accountId;
+
+    // @Column(nullable = true, unique = false)
+    // private int creditCardNo;
+
+    // @Column(nullable = true, unique = false)
+    // private int debitCardno;
+
     @OneToMany(mappedBy = "patient")
     private List<Order> orders;
 
     @OneToMany(mappedBy = "patient")
     private List<Appointment> appointments;
-
-    
 
 }

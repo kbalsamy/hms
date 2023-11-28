@@ -3,15 +3,28 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import com.hygieia.app.DTO.UserPaymentDto;
 import com.hygieia.app.Models.Appointment;
+import com.hygieia.app.Models.Order;
+import com.hygieia.app.Repositories.OrderRepository;
+import com.hygieia.app.Repositories.PatientRepository;
 import com.hygieia.app.Services.Observers.Bill;
 
 import java.util.List;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
+
+    @Autowired
+    private AppointmentService appointmentService;
+
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
 
      public List<Bill> observers = new ArrayList<>();
 
@@ -33,12 +46,15 @@ public class PaymentService {
     public Appointment confirmPayment ( UserPaymentDto userPayDto){
 
         try{
+            Appointment appointment = appointmentService.findAppointmentById(userPayDto.getAppointmentId()).get();
+            float amount=appointment.getAmount();
+            
 
         WebClient webClient = WebClient.create();
 
         // Define the URL of the API endpoint for external payment gateway
-        String apiUrl = "https://jsonplaceholder.typicode.com/posts/1";
-
+        String apiUrl = String.format("http://localhost:9091/pay?transferorId=%s&payeeId=1000&amount=%.2f&payMethod=%s",userPayDto.getCard(), amount, userPayDto.getPaymentType() );
+            System.out.println(apiUrl);
         // Make a GET request and retrieve the response
         ClientResponse response = webClient.get()
                 .uri(apiUrl)
@@ -49,18 +65,19 @@ public class PaymentService {
             new Exception("Payment failed");
             return null;
         }
-        Appointment appointment = new Appointment();
-        // Appointment appointment = appointmentService.findAppointmentById(userPayDto.getAppointmentId()).get();
-        // String responseBody = response.bodyToMono(String.class).block();
+        String responseBody = response.bodyToMono(String.class).block();
+        System.out.println(responseBody);
+
         // create order
-        // Order order = new Order();
-        // order.setPatient(patientRepository.findById(1).get());
-        // order.setAmount(1000);
-        // order.setPaymentType(userPayDto.getPaymentType());
-        // order.setAppointment(appointment);
-        // orderRepository.save(order);                
+        Order order = new Order();
+        order.setPatient(patientRepository.findById(userPayDto.getPatientId()).get());
+        order.setAmount(amount);
+        order.setPaymentType(userPayDto.getPaymentType());
+        order.setAppointment(appointment);
+        orderRepository.save(order);                
         appointment.setStatus("booked");
-        // appointmentService.updateAppoinment(appointment);
+        appointment.setOrderId(order);
+        appointmentService.updateAppoinment(appointment);
         // notify all observers
         this.notifyAllObservers(userPayDto);
         return appointment;

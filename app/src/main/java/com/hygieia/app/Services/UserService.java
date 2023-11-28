@@ -12,15 +12,12 @@ public class UserService {
     @Autowired
     private AuthUserRepository AuthUserRepo;
 
-
     @Autowired
     private PatientService patService;
 
-  
-
     public Patient saveUser(UserRegisterDto userregDto) {
 
-        if(AuthUserRepo.existsByUserName(userregDto.getUserName())){
+        if (AuthUserRepo.existsByUserName(userregDto.getUserName())) {
             return null;
         }
 
@@ -33,7 +30,9 @@ public class UserService {
         user.setPhoneNo(userregDto.getPhoneNo());
         user.setAddress(userregDto.getAddress());
         user.setHealthPlan(userregDto.getHealthPlan());
+        // user.setCreditCardNo(userregDto.getCreditCardNo());
 
+        // user.setDebitCardno(userregDto.getDebitCardNo());
 
         Patient newPatient = patService.SavePatient(user);
         return newPatient;
