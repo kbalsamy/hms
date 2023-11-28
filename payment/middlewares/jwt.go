@@ -1,62 +1,44 @@
 package middlewares
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-
-	"github.com/EDDYCJY/go-gin-example/pkg/e"
-	"github.com/EDDYCJY/go-gin-example/pkg/util"
+	"github.com/golang-jwt/jwt"
 )
 
-func generateToken() string {
-	username := "lynn"
-	password := "ahua"
+var hmacSampleSecret = []byte("gp7LI7u5nvqHoTmzRe2iLKexAJAAhZwZwCsCowO39WvJBHktueLpSV6uPHJot0FPKUUOohqGQkCufg3tvhb1BscJyREJGAM7dLdqmDqIEkMNtWnGSkKDcLje5N0KXk5Mx6Z7PqGqHgB3wcqGPjhJhEaYN3VqRURhtynPFhC1JMTem7ovIafp2oaxTfRcvm0vgl39MAB5MJOI4U167orzazR1BQpYmveyZjAp50OLgeUzMO1ditDS3FQSx9XEoRjFr83yrBlOtmAmkprMbUX7hQ2zt3LDJWosAEJNTxylXoSvOMsElN0019IknR6iiDYsT342VrvnIf2q3cOWtMy2LtnElWzjWJ7cnhjCRGetZXkF2ZOcz0fXqLr7fM0kqH2Cu1CwV8MZGf1OoBm6u7Db7uxCzQzSOUwQcEFGpKlZ5lUFUkithcynMBbSJNkBABeaYk96rTqhQUZke9FSBYH5hk9OincdgfUXpqrx389NDGgcf4EHlBf8dPLn2iQ0aTJC")
 
-	token, err := util.GenerateToken(username, password)
-	if err != nil {
-
-	}
-	// token
-	// eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAzMmI1YjJjNjA4YmQ0NTU2OGJiZGE0ZDc3NmM3OTE1IiwicGFzc3dvcmQiOiIxYjA3YTFkNzczNTI0M2QzMmJkY2NlYThhYjI3ZGYxNCIsImV4cCI6MTcwMDA1Mzc0OCwiaXNzIjoiZ2luLWJsb2cifQ.T2qQz0X1tNEWpMQp7pdiXEnQF6g-Nua1vQqzHAU82HU
-	return token
-}
-
-// JWT is jwt middleware
-func JWT(c *gin.Context) {
-	var code int
-	var data interface{}
-
-	code = e.SUCCESS
-	// generate token
-	// fmt.Println(generateToken())
-	token := c.Query("token")
-	// fmt.Println(token)
-	if token == "" {
-		code = e.INVALID_PARAMS
-	} else {
-		_, err := util.ParseToken(token)
-		if err != nil {
-			switch err.(*jwt.ValidationError).Errors {
-			case jwt.ValidationErrorExpired:
-				code = e.ERROR_AUTH_CHECK_TOKEN_TIMEOUT
-			default:
-				code = e.ERROR_AUTH_CHECK_TOKEN_FAIL
-			}
+func ParseJWT(c *gin.Context) {
+	tokenString := c.Query("token")
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// Don't forget to validate the alg is what you expect:
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
-	}
-
-	if code != e.SUCCESS {
+		// hmacSampleSecret is a []byte containing your secret, e.g. []byte("my_secret_key")
+		return hmacSampleSecret, nil
+	})
+	if err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{
-			"code": code,
-			"msg":  e.GetMsg(code),
-			"data": data,
+			"code": 500,
+			"msg":  "signature is invalid",
 		})
-
 		c.Abort()
 		return
 	}
 
+	if claims, ok := token.Claims.(jwt.MapClaims); ok {
+		fmt.Println(claims)
+		c.Next()
+	} else {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"code": 500,
+			"msg":  "signature is invalid",
+		})
+		c.Abort()
+		return
+	}
 	c.Next()
 }
