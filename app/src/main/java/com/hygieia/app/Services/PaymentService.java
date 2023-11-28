@@ -54,6 +54,7 @@ public class PaymentService {
 
         // Define the URL of the API endpoint for external payment gateway
         String apiUrl = String.format("http://localhost:9091/pay?transferorId=%s&payeeId=1000&amount=%.2f&payMethod=%s",userPayDto.getCard(), amount, userPayDto.getPaymentType() );
+        // String apiUrl = "https://jsonplaceholder.typicode.com/posts/1";
             System.out.println(apiUrl);
         // Make a GET request and retrieve the response
         ClientResponse response = webClient.get()

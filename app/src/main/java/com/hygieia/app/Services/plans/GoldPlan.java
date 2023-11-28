@@ -1,4 +1,4 @@
-package com.hygieia.app.Services.States;
+package com.hygieia.app.Services.plans;
 
 import com.hygieia.app.Models.HealthPlans;
 import com.hygieia.app.Services.Interfaces.IHealthPlans;

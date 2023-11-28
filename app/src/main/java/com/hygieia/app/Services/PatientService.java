@@ -7,16 +7,20 @@ import org.springframework.stereotype.Service;
 import com.hygieia.app.Models.HealthPlans;
 import com.hygieia.app.Models.Patient;
 import com.hygieia.app.Repositories.PatientRepository;
+import com.hygieia.app.Services.Factories.HealthPlanFactory;
 import com.hygieia.app.Services.Interfaces.IHealthPlans;
-import com.hygieia.app.Services.States.BasicPlan;
-import com.hygieia.app.Services.States.GoldPlan;
-import com.hygieia.app.Services.States.PlatinumPlan;
+import com.hygieia.app.Services.plans.BasicPlan;
+import com.hygieia.app.Services.plans.GoldPlan;
+import com.hygieia.app.Services.plans.PlatinumPlan;
 
 @Service
 public class PatientService {
 
     @Autowired
     private PatientRepository patRepo;
+
+    @Autowired
+    private HealthPlanFactory healthPlanFactory;
 
     public Patient SavePatient(Patient patient) {
 
@@ -38,16 +42,7 @@ public class PatientService {
 
     public IHealthPlans getHealthPlans(String planCode) {
 
-        if (planCode.equals(HealthPlans.BASIC.name())) {
-
-            return new BasicPlan();
-
-        } else if (planCode.equals(HealthPlans.BASIC.name())) {
-            return new GoldPlan();
-
-        } else {
-            return new PlatinumPlan();
-        }
+       return healthPlanFactory.Create(planCode);
 
     }
 
