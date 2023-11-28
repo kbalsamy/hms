@@ -2,8 +2,8 @@ package admin
 
 import (
 	"HMS/payment/models"
+	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,14 +14,12 @@ type CreditCardAccountController struct {
 
 func (con CreditCardAccountController) Pay(c *gin.Context) {
 	fmt.Println("-----credit")
-	transferorId, _ := strconv.Atoi(c.Query("transferorId"))
-	payeeId, _ := strconv.Atoi(c.Query("payeeId"))
-	value, err := strconv.ParseFloat(c.Query("amount"), 32)
-
+	transferorId, payeeId, amount, _ := con.getParameters(c)
+	err := con.VerifyNumver(c, transferorId, amount)
 	if err != nil {
-		// do something sensible
+		return
 	}
-	amount := float32(value)
+
 	// begin a transaction
 	tx := models.DB.Begin()
 	defer func() {
@@ -31,18 +29,17 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 		}
 	}()
 	// transferor going to transfer mondy to someone
-	ul := models.Credit{Id: transferorId}
-	tx.Find(&ul)
+	var ul *models.Credit
+	tx.Find(&ul, models.DB.Where("Creditnumber = ?", transferorId))
 	ul.Amount = ul.Amount + amount
 	if err := tx.Save(&ul).Error; err != nil {
 		tx.Rollback()
 		con.error(c, "Payment account abnormal")
 		return
 	}
-	// panic("exception")
 	//payee get incremented money amount
-	u2 := models.Debit{Id: payeeId}
-	tx.Find(&u2)
+	var u2 *models.Debit
+	tx.Find(&u2, models.DB.Where("Accountnumber = ?", payeeId))
 	u2.Balance = u2.Balance + amount
 	if err := tx.Save(&u2).Error; err != nil {
 		tx.Rollback()
@@ -52,4 +49,16 @@ func (con CreditCardAccountController) Pay(c *gin.Context) {
 
 	tx.Commit()
 	con.success(c)
+}
+
+func (con CreditCardAccountController) VerifyNumver(c *gin.Context, transferorId int64, amount float32) error {
+	// verify transferorId
+	var u2 *models.Credit
+	u3 := models.DB.First(&u2, models.DB.Where("Creditnumber = ?", transferorId))
+
+	if u3.Error != nil {
+		con.error(c, "transferor not found")
+		return errors.New("transferor not found")
+	}
+	return nil
 }

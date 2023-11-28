@@ -2,8 +2,8 @@ package admin
 
 import (
 	"HMS/payment/models"
+	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,15 +14,11 @@ type DebitCardAccountController struct {
 
 func (con DebitCardAccountController) Pay(c *gin.Context) {
 	fmt.Println("=====debit")
-	transferorId, _ := strconv.Atoi(c.Query("transferorId"))
-	payeeId, _ := strconv.Atoi(c.Query("payeeId"))
-	value, err := strconv.ParseFloat(c.Query("amount"), 32)
-
+	transferorId, payeeId, amount, _ := con.getParameters(c)
+	err := con.VerifyNumver(c, transferorId, amount)
 	if err != nil {
-		// do something sensible
+		return
 	}
-	amount := float32(value)
-	// amount := float32(c.Query("amount"))
 	// begin a transaction
 	tx := models.DB.Begin()
 	defer func() {
@@ -31,20 +27,20 @@ func (con DebitCardAccountController) Pay(c *gin.Context) {
 			con.error(c, "failure of transaction")
 		}
 	}()
-	// transferor going to transfer mondy to someone
-	ul := models.Debit{Id: transferorId}
-	tx.Find(&ul)
+	var ul *models.Debit
+
+	tx.Find(&ul, models.DB.Where("Accountnumber = ?", transferorId))
 	ul.Balance = ul.Balance - amount
-	if err := tx.Save(&ul).Error; err != nil {
+	if err := tx.Save(&ul).Error; err != nil || ul.Balance < 0 {
 		tx.Rollback()
 		con.error(c, "Payment account abnormal")
 		return
 	}
-	//payee get incremented money amount
-	u2 := models.Debit{Id: payeeId}
-	tx.Find(&u2)
-	u2.Balance = u2.Balance + amount
-	if err := tx.Save(&u2).Error; err != nil {
+
+	var u3 *models.Debit
+	tx.Find(&u3, models.DB.Where("Accountnumber = ?", payeeId))
+	u3.Balance = u3.Balance + amount
+	if err := tx.Save(&u3).Error; err != nil {
 		tx.Rollback()
 		con.error(c, "Collection account abnormal")
 		return
@@ -52,4 +48,15 @@ func (con DebitCardAccountController) Pay(c *gin.Context) {
 
 	tx.Commit()
 	con.success(c)
+}
+func (con DebitCardAccountController) VerifyNumver(c *gin.Context, transferorId int64, amount float32) error {
+	// verify transferorId
+	var u2 *models.Debit
+	u3 := models.DB.First(&u2, models.DB.Where("Accountnumber = ?", transferorId))
+
+	if u3.Error != nil {
+		con.error(c, "transferor not found")
+		return errors.New("transferor not found")
+	}
+	return nil
 }

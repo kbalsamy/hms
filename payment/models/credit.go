@@ -1,10 +1,11 @@
 package models
 
 type Credit struct {
-	Id         int
-	Username   string
-	Expirydate string
-	Amount     float32
+	Id           int64
+	Username     string
+	Creditnumber int64
+	Expirydate   string
+	Amount       float32
 }
 
 func (Credit) TableName() string {
