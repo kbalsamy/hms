@@ -8,14 +8,21 @@ import com.hygieia.app.Repositories.OrderRepository;
 import com.hygieia.app.Repositories.PatientRepository;
 import com.hygieia.app.Services.Observers.Bill;
 
+
 import java.util.List;
 import java.util.ArrayList;
 
+import org.apache.tomcat.util.json.JSONParser;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
 public class PaymentService {
+
+    @Value("${PAYMENT_GATEWAY_SECRET_KEY}")
+    private String secret_key;
 
     @Autowired
     private AppointmentService appointmentService;
@@ -51,9 +58,12 @@ public class PaymentService {
             
 
         WebClient webClient = WebClient.create();
+            
+        CustomToken tokenGenerator = new CustomToken(secret_key);
+        System.out.println(tokenGenerator.getToken());
 
         // Define the URL of the API endpoint for external payment gateway
-        String apiUrl = String.format("http://localhost:9091/pay?transferorId=%s&payeeId=1000&amount=%.2f&payMethod=%s",userPayDto.getCard(), amount, userPayDto.getPaymentType() );
+        String apiUrl = String.format("http://localhost:9091/pay?transferorId=%s&payeeId=2345678910294229&amount=%.2f&payMethod=%s&token=%s",userPayDto.getCard(), amount, userPayDto.getPaymentType(), tokenGenerator.getToken() );
         // String apiUrl = "https://jsonplaceholder.typicode.com/posts/1";
             System.out.println(apiUrl);
         // Make a GET request and retrieve the response
@@ -68,16 +78,19 @@ public class PaymentService {
         }
         String responseBody = response.bodyToMono(String.class).block();
         System.out.println(responseBody);
-
-        // create order
+        JSONObject jsonObject = new JSONObject(responseBody);
+        System.out.println(jsonObject.getInt("paymentReferenceId"));
+        // create orders
         Order order = new Order();
         order.setPatient(patientRepository.findById(userPayDto.getPatientId()).get());
         order.setAmount(amount);
         order.setPaymentType(userPayDto.getPaymentType());
         order.setAppointment(appointment);
+        order.setPaymentRef(jsonObject.getInt("paymentReferenceId"));
         orderRepository.save(order);                
         appointment.setStatus("booked");
         appointment.setOrderId(order);
+        
         appointmentService.updateAppoinment(appointment);
         // notify all observers
         this.notifyAllObservers(userPayDto);

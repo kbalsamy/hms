@@ -1,5 +1,12 @@
-{"properties": [{
-  "name": "hygieia.jwt.key",
-  "type": "java.lang.String",
-  "description": "A description for 'hygieia.jwt.key'"
-}]}
+{"properties": [
+  {
+    "name": "hygieia.jwt.key",
+    "type": "java.lang.String",
+    "description": "A description for 'hygieia.jwt.key'"
+  },
+  {
+    "name": "PAYMENT_GATEWAY_SECRET_KEY",
+    "type": "java.lang.String",
+    "description": "A description for 'PAYMENT_GATEWAY_SECRET_KEY'"
+  }
+]}
