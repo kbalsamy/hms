@@ -53,8 +53,7 @@ public class SecurityPropery {
         httpSecurity.authorizeHttpRequests(auth -> 
 
         (auth.requestMatchers(mvcMatcherBuilder.pattern(API_URL_PATTERN)).permitAll()
-                .requestMatchers(PathRequest.toH2Console())).permitAll().
-            anyRequest().authenticated()
+                ).anyRequest().authenticated()
             
         ).addFilterBefore(JwtAuthorizationFilter,UsernamePasswordAuthenticationFilter.class);
 
