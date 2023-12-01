@@ -3,6 +3,7 @@ package com.hygieia.app.Services;
 import java.util.Date;
 
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 public class CustomToken {
 
@@ -14,10 +15,10 @@ public class CustomToken {
         Date currentDate = new Date();
 		Date expireDate = new Date(currentDate.getTime() + 1000 * 60 * 60 *2);
         this.key = key;
-        this.token = Jwts.builder()
+        this.token = Jwts.builder() 
                 .setSubject("hygieia")
                 .claim("userName","hygieia")
-                .signWith(io.jsonwebtoken.SignatureAlgorithm.HS256, key)
+                .signWith(SignatureAlgorithm.HS256, key.getBytes())
                 .issuedAt(new Date())
                 .setExpiration(expireDate)
                 .compact();
