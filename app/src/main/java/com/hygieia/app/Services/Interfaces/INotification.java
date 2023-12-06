@@ -2,6 +2,6 @@ package com.hygieia.app.Services.Interfaces;
 
 public interface INotification {
 
-    void sendNotification();
+    void sendNotification(String msg);
     
 }

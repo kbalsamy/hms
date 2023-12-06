@@ -2,15 +2,12 @@ package com.hygieia.app.Services.Notification;
 
 import com.hygieia.app.Services.Interfaces.INotification;
 
-public class EmailNotification implements INotification{
+public class EmailNotification implements INotification {
 
-   public void sendNotification(){
+    public void sendNotification(String msg) {
 
-    System.out.println("Email Notification : Your appointment is ready");
-
-
-
+        System.out.println("Email Notification : " + msg);
 
     }
-    
+
 }
