@@ -46,7 +46,7 @@ public class Bill implements IBill {
         INotification decoratedNotification=new SMSNotification(emailNotification);
         INotification fullyDecoratedNotification=new PushNotification(decoratedNotification);
 
-        fullyDecoratedNotification.sendNotification();
+        fullyDecoratedNotification.sendNotification("Your Appointmnet is ready");
 
         System.out.println("Bill sent");
     }
