@@ -1,4 +1,4 @@
-package com.hygieia.app.Services.Session;
+package com.hygieia.app.Services;
 
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;

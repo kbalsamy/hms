@@ -23,7 +23,7 @@ import com.hygieia.app.Services.Commands.TurnOffCameraCommand;
 import com.hygieia.app.Services.Commands.TurnOnCameraCommand;
 import com.hygieia.app.Services.Commands.UnmuteCommand;
 import com.hygieia.app.Services.Commands.VideoChatReceiver;
-import com.hygieia.app.Services.Session.VideoMeetingSessionManager;
+import com.hygieia.app.Services.VideoMeetingSessionManager;
 
 @RestController
 @CrossOrigin
