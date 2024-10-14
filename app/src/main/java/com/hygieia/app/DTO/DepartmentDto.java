@@ -1,9 +1,5 @@
 package com.hygieia.app.DTO;
 
-import java.util.Date;
-
-
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

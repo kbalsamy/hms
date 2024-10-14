@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +31,7 @@ import com.hygieia.app.Services.RoleService;
 @RestController
 @CrossOrigin
 @RequestMapping("api/v1/employee")
+
 public class EmployeeController {
 
     @Autowired
@@ -43,9 +47,12 @@ public class EmployeeController {
     @Autowired
     private PasswordService passwordService;
 
-    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiResponse> Registration(@RequestBody EmployeeRegDto empDto) {
 
+    @PostMapping(value = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<ApiResponse> Registration(@RequestBody EmployeeRegDto empDto) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(auth.getAuthorities());
         try {
 
             Employee emp = employeeService.saveUser(empDto);
@@ -86,22 +93,7 @@ public class EmployeeController {
         }
     }
 
-
-    // @GetMapping("/find")
-    // public ResponseEntity<ApiResponse> GetdoctorsyDepartmentID(@RequestParam Long depatmentId) {
-
-    //     try {
-
-    //         List<Employee> employees = employeeService.findDoctorsByDepartmentId(depatmentId);
-
-    //         return ResponseEntity.status(HttpStatus.OK)
-    //                 .body(new ApiResponse(true, "Doctors retrieved successfully", employees));
-    //     } catch (Exception e) {
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(new ApiResponse(false, "Error retrieving doctors", null));
-    //     }
-    // }
-
+    
 
     @GetMapping("/find/doctors")
     public ResponseEntity<ApiResponse> Getdoctors(@RequestParam Long depatmentId, @RequestParam int roleId) {

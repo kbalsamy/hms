@@ -40,5 +40,6 @@ public class Availability {
     @JsonIgnore
     private Employee employee;
 
+
     
 }

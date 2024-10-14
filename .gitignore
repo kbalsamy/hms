@@ -42,3 +42,7 @@ settings.json
 appLogs.json
 
 appLogs.json.1
+
+/app/src/main/resources/application.properties
+
+/payment/conf/app.ini

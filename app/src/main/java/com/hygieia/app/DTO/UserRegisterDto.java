@@ -24,5 +24,11 @@ public class UserRegisterDto {
     private int phoneNo;
 
     private String address;
+
+    private String healthPlan;
+
+    // private int creditCardNo;
+
+    // private int debitCardNo;
     
 }

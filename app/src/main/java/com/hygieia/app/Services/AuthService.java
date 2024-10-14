@@ -44,4 +44,10 @@ public class AuthService {
         return authUser;
 
     }
+
+    public AuthUser GetAuthUserByUserName(String userName){
+                com.hygieia.app.Models.AuthUser user = userRepo.GetuserbyUserName(userName);
+
+                return user;
+    }
 }

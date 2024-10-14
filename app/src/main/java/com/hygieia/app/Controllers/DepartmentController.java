@@ -6,6 +6,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ public class DepartmentController {
 
     // create a new department
     @PostMapping("/create")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> createDepartment(@RequestBody DepartmentDto departmentDto) {
         try{
             
@@ -44,7 +46,7 @@ public class DepartmentController {
     }
 
     //get all departments
-    @GetMapping("/all")
+    @GetMapping("/all")    
     public ResponseEntity<ApiResponse> getAllDepartments() {
         try{
             return ResponseEntity.ok(new ApiResponse(true, "Departments fetched successfully", departmentService.getAllDepartments()));
@@ -55,6 +57,7 @@ public class DepartmentController {
 
      //update an existing department   
     @PutMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<ApiResponse> updateDepartment(@RequestBody Department department, @PathVariable Long id) {
         try{
             Department existingDepartment = departmentService.findDepartmentById(id).orElseThrow(()->new ResourceNotFoundException(

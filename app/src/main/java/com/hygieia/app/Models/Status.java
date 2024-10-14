@@ -1,9 +1,13 @@
 package com.hygieia.app.Models;
 
 public enum Status {
-    Booked,
-    Completed,
-    Cancelled
+    BOOKED,
+    COMPLETED,
+    CANCELLED,
+    INPROGRESS,
+    AVAILABLE,
+    PENDING
+    
 
     
 }

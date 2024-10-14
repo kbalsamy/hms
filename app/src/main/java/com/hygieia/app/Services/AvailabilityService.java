@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.hygieia.app.DTO.AvailabilityDto;
 import com.hygieia.app.Models.Availability;
 import com.hygieia.app.Models.Employee;
-import com.hygieia.app.Models.Role;
 import com.hygieia.app.Repositories.AvailabilityRepository;
 
 @Service
